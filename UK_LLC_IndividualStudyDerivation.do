@@ -1,3 +1,5 @@
+*** This is stata code to derive harmonised variables which are then combined in R before being analysed in Stata. 
+
 *** Note this Stata file has been complied by Richard Shaw (richard.shaw@glasgow.ac.uk) Other contributors to work include  
 * Jingmin Zhu (ELSA) & Rebecca Rhead (NCDS, BCS70 Next steps) and undoubtedly been informed by the work of many others. 
 
