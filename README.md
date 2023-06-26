@@ -7,3 +7,6 @@ NHS healthcare and hospital records will also tell us how severe people’s infe
 We hope that this study will tell us how COVID-19 and long COVID might influence people’s ability to carry on in work and cope financially. We will share the results with policy makers to guide decisions on how to support people who have been infected by COVID-19 to return to work and financially support their families. This will be important given the large numbers of people who have long COVID."
 
 Richard Shaw richard.shaw@glasgow.ac.uk 
+
+Note Files 1 to 4, which should be run in order, are required to carry out the analyses in the UK LLC TRE. 
+File 99 is required to carryout the analyses using the publically avaiable data from the UK Data Service. 
