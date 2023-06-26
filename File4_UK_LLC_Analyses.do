@@ -1,3 +1,5 @@
+*This file contains the code to select the final analytic sample and run the descriptives and analyses. 
+
 use "S:\LLC_0010\data\flow_chart\FlowChart_24Apr2023.dta" , clear
 
 *Creating necessary variables 
