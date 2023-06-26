@@ -1,7 +1,9 @@
+*This file is used to derive all the analytic files and carry out analyses using the publically available versions of the files available from the UK Data Service. (https://ukdataservice.ac.uk/)
+*Thus should be consisered a seperate file from the others. 
+
 *** Note this Stata file has been complied by Richard Shaw (richard.shaw@glasgow.ac.uk) Other contributors to work include  
 * Jingmin Zhu (ELSA) & Rebecca Rhead (NCDS, BCS70 Next steps) and undoubtedly been informed by the work of many others. 
 
-*This file is used to derive all the analytic files and carry out analyses using the publically available versions of the files available from the UK Data Service. (https://ukdataservice.ac.uk/)
 
 
 clear all
