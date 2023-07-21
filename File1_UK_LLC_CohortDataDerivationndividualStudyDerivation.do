@@ -77,8 +77,8 @@ gen study_selection = 1  if corepartner_w1==1 | corepartner_w2==1
 replace study_selection = . if ELSA_inwave == "..1" | ELSA_inwave == ".1." | ELSA_inwave == ".11"
 
 gen age_selection = 1 
-replace age_selection = . if age_arch_w2 >= 67
-replace age_selection = . if age_arch_w1 >= 67 & age_arch_w2==.
+replace age_selection = . if age_arch_w2 >= 66
+replace age_selection = . if age_arch_w1 >= 66 & age_arch_w2==.
 gen employment_selection = 1  if cvpred_w1 == 2 | cvpred_w1== 3
 
 
@@ -1240,7 +1240,7 @@ recode pre_pandemic_emp . = 0 if c`letter'_blwork == 4
 
 
 gen study_selection = in_cg
-gen age_selection = 1 if age_at_start >= 25 & cg_age < 67
+gen age_selection = 1 if age_at_start >= 25 & cg_age < 66
 gen employment_selection = 1 if pre_pandemic_emp == 1 
 
 
