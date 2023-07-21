@@ -106,8 +106,8 @@ gen study_selection = 1  if corepartner_w1==1 | corepartner_w2==1
 replace study_selection = . if inWave9 != 1 | inCVWave1 != 1 | inCVWave2 != 1
 
 gen age_selection = 1 
-replace age_selection = . if age_arch_w2 >= 67
-replace age_selection = . if age_arch_w1 >= 67 & age_arch_w2==.
+replace age_selection = . if age_arch_w2 >= 66
+replace age_selection = . if age_arch_w1 >= 66 & age_arch_w2==.
 gen employment_selection = 1  if cvpred_w1 == 2 | cvpred_w1== 3
 
 
@@ -1251,7 +1251,7 @@ recode pre_pandemic_emp . = 0 if c`letter'_blwork == 4
 
 
 gen study_selection = in_cg
-gen age_selection = 1 if age_at_start >= 25 & cg_age < 67
+gen age_selection = 1 if age_at_start >= 25 & cg_age < 66
 gen employment_selection = 1 if pre_pandemic_emp == 1 
 
 
@@ -2804,21 +2804,21 @@ tab econ_act employm, miss
 
 
 *** Descriptive statistics 
-tab1 econ_act employm covid_sr  age_cat sex hh_comp  shielding sr_health nssec7 education cohort_num country if in_analyses==1, miss
+tab1 econ_act employm covid_sr  age_cat sex hh_comp  shielding sr_health nssec7 education cohort_num country keyworker if in_analyses==1, miss
 
 
 *** Economic activity unadjusted 
 logistic econ_act i.covid_sr  if in_analyses==1
 
 **** Economic activity full model 
-logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num i.country if in_analyses==1
+logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num i.country i.keyworker  if in_analyses==1
 
 
 **** employment status unadjusted 
 logistic employm i.covid_sr  if in_analyses==1
 
 **** employment status full model 
-logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding i.sr_health i.nssec7 i.education i.cohort_num i.country  if in_analyses==1
+logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding i.sr_health i.nssec7 i.education i.cohort_num i.country i.keyworker  if in_analyses==1
 
 
 
@@ -2829,84 +2829,90 @@ logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding i.sr_heal
 logistic econ_act i.covid_sr  if in_analyses==1  & country == 1
 
 **** Economic activity full model 
-logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & country == 1
+logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num  i.keyworker  if in_analyses==1 & country == 1
 
 
 **** employment status unadjusted 
 logistic employm i.covid_sr  if in_analyses==1 & country == 1
 
 **** employment status full model 
-logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding i.sr_health i.nssec7 i.education i.cohort_num i.country  if in_analyses==1 & country == 1
+logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding i.sr_health i.nssec7 i.education i.cohort_num i.country i.keyworker  if in_analyses==1 & country == 1
 
 
 ****************** Stratified analyses
 
 * Economic activity 
 **** Age stratified 
-logistic econ_act i.covid_sr  i.sex              i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & age_bin == 0
+logistic econ_act i.covid_sr  i.sex              i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.keyworker  i.cohort_num if in_analyses==1 & age_bin == 0
 
 
-logistic econ_act i.covid_sr  i.sex             i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & age_bin == 1
+logistic econ_act i.covid_sr  i.sex             i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.keyworker i.cohort_num if in_analyses==1 & age_bin == 1
 
 
 
 
 
 **** Sex stratified 
-logistic econ_act i.covid_sr         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & sex == 0
+logistic econ_act i.covid_sr         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.keyworker  i.cohort_num if in_analyses==1 & sex == 0
 
 
-logistic econ_act i.covid_sr         c.age##c.age  i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & sex == 1
+logistic econ_act i.covid_sr         c.age##c.age  i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.keyworker  i.cohort_num if in_analyses==1 & sex == 1
 
 
 
 
 
 **** NS_sec
-logistic econ_act i.covid_sr i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education i.cohort_num if in_analyses==1 & nssec2 == 0
+logistic econ_act i.covid_sr i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education i.keyworker  i.cohort_num if in_analyses==1 & nssec2 == 0
 
 
-logistic econ_act i.covid_sr i.sex c.age##c.age  i.hh_comp i.shielding i.sr_health            i.education i.cohort_num if in_analyses==1 & nssec2 == 1
+logistic econ_act i.covid_sr i.sex c.age##c.age  i.hh_comp i.shielding i.sr_health            i.education i.keyworker  i.cohort_num if in_analyses==1 & nssec2 == 1
 
 
 *** Sr health 
-logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.cohort_num   if in_analyses==1 & sr_bin == 0
-logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.cohort_num   if in_analyses==1 & sr_bin == 1
+logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.keyworker  i.cohort_num   if in_analyses==1 & sr_bin == 0
+logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.keyworker i.cohort_num   if in_analyses==1 & sr_bin == 1
 
-
+*** keyworker 
+logistic econ_act i.covid_sr c.zage##c.zage   i.sex i.hh_comp   i.shielding  i.sr_health  i.nssec7 i.education          i.cohort_num   if in_analyses==1 & keyworker == 0
+logistic econ_act i.covid_sr c.zage##c.zage   i.sex i.hh_comp   i.shielding  i.sr_health  i.nssec7 i.education          i.cohort_num   if in_analyses==1 & keyworker == 1
 
 
 * Employment status 
 **** Age stratified 
-logistic employm i.covid_sr  i.sex              i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & age_bin == 0
+logistic employm i.covid_sr  i.sex              i.hh_comp i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1 & age_bin == 0
 
 
-logistic employm i.covid_sr  i.sex             i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & age_bin == 1
+logistic employm i.covid_sr  i.sex             i.hh_comp  i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1 & age_bin == 1
 
 
 
 
 
 **** Sex stratified 
-logistic employm i.covid_sr         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & sex == 0
+logistic employm i.covid_sr         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1 & sex == 0
 
 
-logistic employm i.covid_sr         c.age##c.age  i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 & sex == 1
+logistic employm i.covid_sr         c.age##c.age  i.hh_comp i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1 & sex == 1
 
 
 
 
 
 **** NS_sec
-logistic employm i.covid_sr i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education i.cohort_num if in_analyses==1 & nssec2 == 0
+logistic employm i.covid_sr i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 0
 
 
-logistic employm i.covid_sr i.sex c.age##c.age  i.hh_comp i.shielding i.sr_health            i.education i.cohort_num if in_analyses==1 & nssec2 == 1
+logistic employm i.covid_sr i.sex c.age##c.age  i.hh_comp i.shielding i.sr_health            i.education  i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 1
 
 
 *** Sr health 
-logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.cohort_num   if in_analyses==1 & sr_bin == 0
-logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.cohort_num   if in_analyses==1 & sr_bin == 1
+logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education  i.keyworker i.cohort_num   if in_analyses==1 & sr_bin == 0
+logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education  i.keyworker i.cohort_num   if in_analyses==1 & sr_bin == 1
+
+*** keyworker 
+logistic employm i.covid_sr c.zage##c.zage   i.sex i.hh_comp   i.shielding  i.sr_health  i.nssec7 i.education          i.cohort_num   if in_analyses==1 & keyworker == 0
+logistic employm i.covid_sr c.zage##c.zage   i.sex i.hh_comp   i.shielding  i.sr_health  i.nssec7 i.education          i.cohort_num   if in_analyses==1 & keyworker == 1
 
 
 
@@ -2914,81 +2920,92 @@ logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding          
 
 * Economic activity 
 **** Age  
-logistic econ_act i.covid_sr##c.age_bin  i.sex i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1
+logistic econ_act i.covid_sr##c.age_bin  i.sex i.hh_comp i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1
 estimates store act_age_int
-logistic econ_act i.covid_sr c.age_bin  i.sex i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1
+logistic econ_act i.covid_sr c.age_bin  i.sex i.hh_comp i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1
 estimates store act_age_base
 lrtest act_age_int act_age_base
 
 
 
 **** Sex  
-logistic econ_act i.covid_sr##c.sex         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 
+logistic econ_act i.covid_sr##c.sex         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1 
 estimates store act_sex_int 
-logistic econ_act i.covid_sr c.sex         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 
+logistic econ_act i.covid_sr c.sex         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1 
 estimates store act_sex_base
 lrtest act_sex_int act_sex_base
 
 
 **** NS_sec
-logistic econ_act i.covid_sr##nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education i.cohort_num if in_analyses==1 
+logistic econ_act i.covid_sr##nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker  i.cohort_num if in_analyses==1 
 estimates store act_nssec_int 
-logistic econ_act i.covid_sr nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education i.cohort_num if in_analyses==1 
+logistic econ_act i.covid_sr nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker  i.cohort_num if in_analyses==1 
 estimates store act_nssec_base
 lrtest act_nssec_int act_nssec_base 
 
 
 *** Sr health 
-logistic econ_act i.covid_sr##sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.cohort_num   if in_analyses==1 
+logistic econ_act i.covid_sr##sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.keyworker  i.cohort_num   if in_analyses==1 
 estimates store act_health_int
-logistic econ_act i.covid_sr  sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.cohort_num   if in_analyses==1
+logistic econ_act i.covid_sr  sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.keyworker  i.cohort_num   if in_analyses==1
 estimates store act_health_base
 lrtest act_health_int act_health_base
 
-
+*** keyworker 
+logistic econ_act i.covid_sr##i.keyworker c.zage##c.zage   i.sex i.hh_comp   i.shielding  i.sr_health i.nssec7 i.education      i.cohort_num   if in_analyses==1 
+estimates store act_keyworker_int
+logistic econ_act i.covid_sr  i.keyworker c.zage##c.zage   i.sex i.hh_comp   i.shielding   i.sr_health i.nssec7 i.education     i.cohort_num   if in_analyses==1
+estimates store act_keyworker_base
+lrtest act_keyworker_int act_keyworker_base
 
 
 * Employment status 
 **** Age  
-logistic employm i.covid_sr##c.age_bin  i.sex i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1
+logistic employm i.covid_sr##c.age_bin  i.sex i.hh_comp i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1
 estimates store act_age_int
-logistic employm i.covid_sr c.age_bin  i.sex i.hh_comp i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1
+logistic employm i.covid_sr c.age_bin  i.sex i.hh_comp i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1
 estimates store act_age_base
 lrtest act_age_int act_age_base
 
 
 **** Sex  
-logistic employm i.covid_sr##c.sex         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 
+logistic employm i.covid_sr##c.sex         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1 
 estimates store act_sex_int 
-logistic employm i.covid_sr c.sex         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1 
+logistic employm i.covid_sr c.sex         c.age##c.age  i.hh_comp  i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num if in_analyses==1 
 estimates store act_sex_base
 lrtest act_sex_int act_sex_base
 
 
 **** NS_sec
-logistic employm i.covid_sr##nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education i.cohort_num if in_analyses==1 
+logistic employm i.covid_sr##nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker i.cohort_num if in_analyses==1 
 estimates store act_nssec_int 
-logistic employm i.covid_sr nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education i.cohort_num if in_analyses==1 
+logistic employm i.covid_sr nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker i.cohort_num if in_analyses==1 
 estimates store act_nssec_base
 lrtest act_nssec_int act_nssec_base 
 
 
 *** Sr health 
-logistic employm i.covid_sr##sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.cohort_num   if in_analyses==1 
+logistic employm i.covid_sr##sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education  i.keyworker i.cohort_num   if in_analyses==1 
 estimates store act_health_int
-logistic employm i.covid_sr  sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.cohort_num   if in_analyses==1
+logistic employm i.covid_sr  sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education  i.keyworker i.cohort_num   if in_analyses==1
 estimates store act_health_base
 lrtest act_health_int act_health_base
+*** keyworker 
+logistic employm i.covid_sr##i.keyworker c.zage##c.zage   i.sex i.hh_comp   i.shielding  i.sr_health i.nssec7 i.education      i.cohort_num   if in_analyses==1 
+estimates store act_keyworker_int
+logistic employm i.covid_sr  i.keyworker c.zage##c.zage   i.sex i.hh_comp   i.shielding   i.sr_health i.nssec7 i.education     i.cohort_num   if in_analyses==1
+estimates store act_keyworker_base
+lrtest act_keyworker_int act_keyworker_base
 
 *** Alternative age coding due to small coefficent sizes
 egen zage = std(age)
 
 **** Economic activity full model 
-logistic econ_act i.covid_sr c.zage##c.zage i.sex i.hh_comp  i.shielding i.sr_health i.nssec7 i.education i.cohort_num i.country if in_analyses==1
+logistic econ_act i.covid_sr c.zage##c.zage i.sex i.hh_comp  i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num i.country if in_analyses==1
 
 
 
 
 **** employment status full model 
-logistic employm i.covid_sr c.zage##c.zage i.sex i.hh_comp   i.shielding i.sr_health i.nssec7 i.education i.cohort_num i.country  if in_analyses==1
+logistic employm i.covid_sr c.zage##c.zage i.sex i.hh_comp   i.shielding i.sr_health i.nssec7 i.education  i.keyworker i.cohort_num i.country  if in_analyses==1
 
