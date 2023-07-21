@@ -100,7 +100,7 @@ tab sex, miss
 
 
 *** Descriptive statistics 
-tab1 econ_act employm covid_sr Test_positive age_cat sex hh_comp ethnicity shielding sr_health nssec7 education cohort_num if in_analyses==1, miss
+tab1 econ_act employm covid_sr Test_positive age_cat sex hh_comp ethnicity shielding sr_health nssec7 education cohort_num keyworker if in_analyses==1, miss
 
 *** Cross tabe of self-reported versus test_positive
 tab covid_sr Test_positive if in_analyses==1
@@ -111,14 +111,14 @@ tab covid_sr Test_positive if in_analyses==1
 logistic econ_act i.Test_positive  if in_analyses==1
 
 **** Economic activity full model 
-logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1
+logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding i.sr_health i.nssec7 i.education i.keyworker i.cohort_num if in_analyses==1
 
 
 **** employment status unadjusted 
 logistic employm i.Test_positive  if in_analyses==1
 
 **** employment status full model 
-logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1
+logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding i.sr_health i.nssec7 i.education i.keyworker i.cohort_num if in_analyses==1
 
 
 * Self-reported measures 
@@ -127,14 +127,14 @@ logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity i.shie
 logistic econ_act i.covid_sr  if in_analyses==1
 
 **** Economic activity full model 
-logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1
+logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding i.sr_health i.nssec7 i.education i.keyworker i.cohort_num if in_analyses==1
 
 
 **** employment status unadjusted 
 logistic employm i.covid_sr  if in_analyses==1
 
 **** employment status full model 
-logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding i.sr_health i.nssec7 i.education i.cohort_num if in_analyses==1
+logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding i.sr_health i.nssec7 i.education i.keyworker i.cohort_num if in_analyses==1
 
 
 
@@ -144,61 +144,61 @@ logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp i.ethnicity i.shielding
 
 
 **** Age stratified 
-logistic econ_act i.Test_positive  i.sex  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.cohort_num if in_analyses==1 & age_bin == 0
+logistic econ_act i.Test_positive  i.sex  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & age_bin == 0
 
 
-logistic econ_act i.Test_positive  i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.cohort_num if in_analyses==1 & age_bin == 1
+logistic econ_act i.Test_positive  i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & age_bin == 1
 
 
 **** Sex stratified 
-logistic econ_act i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.cohort_num if in_analyses==1 & sex == 0
+logistic econ_act i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & sex == 0
 
 
-logistic econ_act i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.cohort_num if in_analyses==1 & sex == 1
+logistic econ_act i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & sex == 1
 
 
 
 
 **** class stratified 
-logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.cohort_num if in_analyses==1 & nssec2 == 0
+logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 0
 
 
-logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.cohort_num if in_analyses==1 & nssec2 == 1
+logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 1
 
 
 *** Self-rated health 
 
-logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding  i.nssec7 i.educat_alt i.cohort_num if in_analyses==1 & sr_health < 4
+logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding  i.nssec7 i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & sr_health < 4
 
-logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding  i.nssec7 i.educat_alt i.cohort_num if in_analyses==1 & sr_health > 3
+logistic econ_act i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding  i.nssec7 i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & sr_health > 3
 
 
 
 **** Age stratified 
-logistic employm i.Test_positive  i.sex  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.cohort_num if in_analyses==1 & age_bin == 0
+logistic employm i.Test_positive  i.sex  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & age_bin == 0
 
 
-logistic employm i.Test_positive  i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.cohort_num if in_analyses==1 & age_bin == 1
+logistic employm i.Test_positive  i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & age_bin == 1
 
 
 **** Sex stratified 
-logistic employm i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.cohort_num if in_analyses==1 & sex == 0
+logistic employm i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.keyworker  i.cohort_num if in_analyses==1 & sex == 0
 
 
-logistic employm i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.cohort_num if in_analyses==1 & sex == 1
+logistic employm i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.class_alt i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & sex == 1
 
 
 
 
 **** Xlass stratified 
-logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.cohort_num if in_analyses==1 & nssec2 == 0
+logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 0
 
 
-logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.cohort_num if in_analyses==1 & nssec2 == 1
+logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 1
 
 
 
 **** Self-rated health
-logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding  i.nssec7 i.educat_alt i.cohort_num if in_analyses==1 & sr_health < 4
+logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding  i.nssec7 i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & sr_health < 4
 
-logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding  i.nssec7 i.educat_alt i.cohort_num if in_analyses==1 & sr_health > 3
+logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding  i.nssec7 i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & sr_health > 3
