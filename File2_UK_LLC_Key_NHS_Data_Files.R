@@ -1,8 +1,8 @@
-#This file was used to derive the NHS data files used in the analyss in the project. 
+#This file was used to derive the NHS data files used in the analysis in the project. 
 
-#NB This file has been produced by Richard Shaw @ Univeristy of Glasgow but it  is based on the R helper file
-# Date Last Update: 03 May 2023
-
+#NB This file has been produced by Richard Shaw @ Univeristy of Glasgow but it is based on the R helper file
+# Date Last Major Update: 03 May 2023
+# Typos corrected 11 Feb 2025
 ########################################################################################
 # Title: UK LLC R value and variable labelling helper
 #
@@ -77,7 +77,7 @@ write(viewnames, paste0(output_loc , "file_Names_", Sys.Date(), ".txt"))
 
 
 
-#This is necessary as many things such as ID and codes are imported as numbers and defaultin R is to present
+#This is necessary as many things such as ID and codes are imported as numbers and default in R is to present
 # them as scientific notation. 
 options(scipen = 999)
 
@@ -85,7 +85,7 @@ options(scipen = 999)
 #Using one table method to extract the data 
 ####################################################################################
 # core_denominator_file1_20220623
-# NOte this shows linkage permisions 
+# Note this shows linkage permissions 
 
 
 data_source <- "core"
@@ -121,7 +121,7 @@ saveRDS(core_nhsd_geo_indicator_v0004_20221028 , file = paste0("S:/LLC_0010/data
 
 
 ##########################################################################
-# The older version of this has problems with the BCS70 and unliked peole and should note be used.
+# The older version of this has problems with the BCS70 and unlinked people and should not be used.
 # So does version 3. So will need to use version 3. 
 
 
@@ -176,7 +176,7 @@ saveRDS(nhsd_chess_v0001 , file = paste0("S:/LLC_0010/data/nhsd/nhsd_chess_", Sy
 
 ################################################################################
 ### nhsd_covidsgss_v0001
-#This is pilar testing and one and two one of the more important files. Note that only positive tests
+#This is pillar testing and one and two one of the more important files. Note that only positive tests
 # Are included. 
 
 data_source <- "nhsd"
@@ -236,7 +236,7 @@ name_t1 <- paste0(data_source,"_",table)
 assign(name_t1, data_t1)
 
 
-#Using feather as it is noticably faster. 
+#Using feather as it is noticeably faster. 
 write_feather(nhsd_npex_v0001 , path = paste0("S:/LLC_0010/data/nhsd/nhsd_npex_", Sys.Date() ,".feather"))
 
 
@@ -247,7 +247,7 @@ ielisa   <- readRDS("S:/LLC_0010/data/nhsd/nhsd_ielisa_2022-10-24.rds" )
 npex <- read_feather(path = "S:/LLC_0010/data/nhsd/nhsd_npex_2022-10-24.feather") 
 chess <- readRDS("S:/LLC_0010/data/nhsd/nhsd_chess_2022-10-24.rds")
 
-#Need to add in generation scotland file 
+#Need to add in Generation Scotland file 
 ecoss <-readRDS(  "S:/LLC_0010/data/genscot/genscot_ecoss_2022-10-28.rds")
 
 ### Taking the specifc subsets
