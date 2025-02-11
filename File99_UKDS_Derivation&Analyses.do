@@ -1,15 +1,16 @@
 *This file is used to derive all the analytic files and carry out analyses using the publically available versions of the files available from the UK Data Service. (https://ukdataservice.ac.uk/)
-*Thus should be consisered a seperate file from the others. 
+*Thus should be considered a separate file from the others. 
 
 *** Note this Stata file has been complied by Richard Shaw (richard.shaw@glasgow.ac.uk) Other contributors to work include  
 * Jingmin Zhu (ELSA) & Rebecca Rhead (NCDS, BCS70 Next steps) and undoubtedly been informed by the work of many others. 
+* Note Richard Shaw has dyslexia, and there may be typos. 
 
 
 
 clear all
 set maxvar 30000
 
-*NOte reasembling files in their original form. 
+*Ntte reassembling files in their original form. 
 global source "D:\Data\ARQ7P4\Original"
 global destination "D:\Data\ARQ7P4\Derived"
 
@@ -44,7 +45,7 @@ generate inCVWave2 = 1
 rename idauniq_w2 idauniq
 save "$destination\tempCV_w2.dta", replace
 
-*** Assemblng ELSA wave 9 data which has been broken into many components. 
+*** Assembling ELSA wave 9 data which has been broken into many components. 
 
 *Import the first section
 use "$source\wave_9_elsa_data_eul_v1.dta" , clear 
@@ -84,7 +85,7 @@ save "$destination\temp_w5.dta", replace
 global source "D:\Data\ARQ7P4\Original"
 global destination "D:\Data\ARQ7P4\Derived"
 ********************************************************************************
-*Assemblng files 
+*Assembling files 
 use "$destination\tempCV_w1", clear
 merge 1:1 idauniq using "$destination\tempCV_w2"
 drop _merge
@@ -187,7 +188,7 @@ recode cvhosp_w1 (-9/-8=.)
 gen covcase_w1 =(cvtestb_w1 == 1 | cvhosp_w1 == 1 | srcovid1_w1 == 1) if cvtestb_w1 !=. | cvhosp_w1 !=. | srcovid1_w1 !=.
 tab covcase_w1 , missing
 
-*Note all those who had postive tests had been hospitalized.
+*Note all those who had positive tests had been hospitalized.
 *Note using the coreset of symptoms as the question for ELSA slightly different and 
 * may prompt people to report fatigue irrespective of whether they thought it was due to covid. 
 gen covid_confirmed_w1 = . 
@@ -210,13 +211,13 @@ tab cvtestwhy_final001_w2
 
 *Note no hospital stays in analytic sample 
 gen covid_confirmed_w2 = .
-*Postive tests
+*Positive tests
 recode covid_confirmed_w2 . = 2 if cvtestb_w2 ==1
 *Negative tests
 recode covid_confirmed_w2  . = 0 if cvtestb_w2 ==2
 *Those who had a test due to symptoms
 recode  covid_confirmed_w2 . = 1 if cvtestwhy_final001_w2 ==1
-* remaineder not suspected 
+* remainder not suspected 
 recode  covid_confirmed_w2 . = 0 
 * People whose test results are not being reported. 
 replace covid_confirmed_w2 = .  if cvtestb_w2 == -9
@@ -235,7 +236,7 @@ label values covid_sr covid_sr
 *What was the result of the covid test 
  tab cvtestb_w2
 * -9 prefer not to answer
-*-1 not applicale 
+*-1 not applicable 
 * 1 positive
 * 2 negative
 * 3 inconclusive
@@ -326,9 +327,9 @@ recode education (0 = 0 "NVQ 4 or 5") (1/3 = 1 "NVQ3 or less") , gen(education_b
 
 
 * household composition
-*Note that cvnump_w`k' indicate number in houshold 
+*Note that cvnump_w`k' indicate number in household 
 * Target variable will have the following groups Alone, partner, partner & children, lone parent, other person 
-* Note to be consistent with CLS and USoc  this has been amended to include grandchilren as offspring, not just children
+* Note to be consistent with CLS and USoc  this has been amended to include grandchildren as offspring, not just children
 
 egen offspring_w1=anymatch(demographics_*_cvrelp_w1), values(2 3 4)
 egen offspring_w2=anymatch(demographics_*_cvrelp_w2), values(2 3 4)
@@ -351,7 +352,7 @@ label define cvhhcomp 1"1:only partner" 2"2:partner+kids" 3"3:single parent" 4"4
 label values cvhhcomp_w* cvhhcomp
 }
 
-*New varibale  hh_comp with categoies as used for the CLS studies. 
+*New variable  hh_comp with categories as used for the CLS studies. 
 label define hh_comp 0 "alone" 1 "Partner" 2 "Partner & children" 3 "lone parent" 4 "other person" 
 gen hh_comp =. 
 replace hh_comp = 0 if cvnump_w1 == 1
@@ -412,7 +413,7 @@ gen shielding=(cvvuln_w1==1) if cvvuln_w1!=.
 
 
 *** Five health conditions: pre-pandemic wave combined with first pandemic wave
-**Note other pre_covid waves are added the suffix _w9 will need to be addded to some vars or other ways of selecting variables found
+**Note other pre-covid waves are added the suffix _w9 will need to be added to some vars or other ways of selecting variables found
 
 * cancer
 gen cancer=hedbsca
@@ -460,7 +461,7 @@ replace respiratory=1 if cvhecond07_w1==1
 ********************************************************************************
 *****Variables for analysis 
 
-*** Study mannagement 
+*** Study management 
 * Person id
 *rename llc_0010_stud_id LLC_0010_stud_id
 * Cohort id 
@@ -508,7 +509,7 @@ gen long_covid = .
 
 
 ***Control variables 
-*Country variable does not appear to ba available so using 
+*Country variable does not appear to be available so using 
 gen country =  rgn_arch_w2
 recode country -1 = . 
 replace country = rgn_arch_w1 if rgn_arch_w2 == .
@@ -543,18 +544,18 @@ label values sex sex
 
 * NS-SEC "Seven category" to be consistent across the studies. 
 * Using seven categories as the ELSA 8 categories are different from the other cohorts. 
-recode w5nssec8 (-9/-1 99 = 9 "Other Unclassifiable")  (1 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 =8 "longterm unemployed" ) , gen(nssec7w5)
+recode w5nssec8 (-9/-1 99 = 9 "Other Unclassifiable")  (1 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 =8 "long-term unemployed" ) , gen(nssec7w5)
 label variable nssec7w5 "NS-SEC 7 Categories w6"
 
 
-recode w6nssec8 (-9/-1 99 = 9 "Other Unclassifiable")  (1 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 =8 "longterm unemployed" ) , gen(nssec7w6)
+recode w6nssec8 (-9/-1 99 = 9 "Other Unclassifiable")  (1 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 =8 "long-term unemployed" ) , gen(nssec7w6)
 label variable nssec7w6 "NS-SEC 7 Categories w6"
 
-recode w8nssec8 (-9/-1 99 = 9 "Other Unclassifiable")  (1 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 =8 "longterm unemployed" ) , gen(nssec7w8)
+recode w8nssec8 (-9/-1 99 = 9 "Other Unclassifiable")  (1 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 =8 "long-term unemployed" ) , gen(nssec7w8)
 label variable nssec7w8 "NS-SEC 7 Categories w8"
 
 
-recode w9nssec8 (-9/-1 99 = 9 "Other Unclassifiable")  (1 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 =8 "longterm unemployed" ) , gen(nssec7w9)
+recode w9nssec8 (-9/-1 99 = 9 "Other Unclassifiable")  (1 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 =8 "long-term unemployed" ) , gen(nssec7w9)
 label variable nssec7w9 "NS-SEC 7 Categories w9"
 
 * NS-SEC "Five category" to be consistent 
@@ -606,10 +607,10 @@ tab  respiratory
 
 tab1 employment_status econ_act covid_sr age sex education education_bin ethnicity ethnicity_bin ethnicity1 country hh_comp nssec7 sr_health keyworker mental_health shielding
 
-*Creating a String id variable for anlaysis 
+*Creating a String id variable for analysis 
 tostring idauniq, gen(id_temp)
 gen id_string = "E_" + id_temp
-*Note removoing interview date variables as not eeded 
+*Note removing interview date variables as not needed 
 keep id_string cohort_id study_selection age_selection  employment_selection  ///
 employment_status econ_act covid_sr age sex education education_bin ethnicity ethnicity_bin ethnicity1 country hh_comp nssec7 sr_health keyworker mental_health shielding
 
@@ -624,8 +625,8 @@ clear all
 
 *Recoding all covid waves with single file in same loop. 
 *NB this is all waves apart from e and f, and there are two versions of f. 
-*NB there are current two versions of wave cf I am using the single file version that drops a couple of varibales at the end. 
-* The variables are not needed in this analysis and the two file version appear to drop variale lables. 
+*NB there are current two versions of wave cf I am using the single file version that drops a couple of variables at the end. 
+* The variables are not needed in this analysis and the two file version appears to drop variable labels. 
 
 foreach x in a b c d e f g h {
 use "$source\c`x'_indresp_w.dta" , clear
@@ -672,7 +673,7 @@ save "$destination\k_indresp.dta", replace
 
 
 *****Importing data 
-*Data files to be used at this point are the web survey Pandemic waves c`x'_indresp_w ca - ch (April 2020 to March 2021) and prepandemic waves `x'_indresp g - j (2015 to 2020)
+*Data files to be used at this point are the web survey Pandemic waves c`x'_indresp_w ca - ch (April 2020 to March 2021) and pre-pandemic waves `x'_indresp g - j (2015 to 2020)
 
 
 ***Setting File locations 
@@ -717,9 +718,9 @@ label define no_yes 0 "No" 1 "Yes"
 
 *** Employment status (latest C19 Sweep) 
 *This is derived from ch_sempderived and ch_newfurlough
-*ch_sempderived is a derived varible. Universe is ALL, but around 1.5% are  inapplicable. Not clear why
+*ch_sempderived is a derived variable. Universe is ALL, but around 1.5% are inapplicable. Not clear why
 *ch_newfurloughis  is asked of those who are employed or both employed and self-employed from ch_sempderived  
-* Note if self-employed hours = 0 classifed as as not working. Not doing this for both emplyed and self-employed due to being employed. 
+* Note if self-employed hours = 0 classifed as not working. Not doing this for both employed and self-employed due to being employed. 
 
 gen ch_employment_stat = . 
 replace ch_employment_stat = 2 if ch_newfurlough == 1 // Recodes those reporting as furloughed
@@ -835,7 +836,7 @@ gen age_alt = cg_age
 
 *** age first covid wave with corrections 
 
-*Note that there are some inconsitencies with ca_age which outside the TRE
+*Note that there are some inconsistencies with ca_age which outside the TRE
 * I have previously addressed with ca_pidpcorrected which is not available. 
 * Note solution is I am coding as missing in ca_age and then replacing with next available
 * or year of birth. 
@@ -855,7 +856,7 @@ replace lob_birthy = g_birthy if lob_birthy == .
 recode lob_birthy (-9/-1 = .)
 gen dob_age = 2020 - lob_birthy
 
-*Note that there are some inconsitencies with ca_age which 
+*Note that there are some inconsistencies with ca_age which 
 * I have previously addressed with ca_pidpcorrected which is not available. 
 * Note that I am recoding ca_ages 
 gen ca_age_temp = ca_age
@@ -883,7 +884,7 @@ label values sex sex
 drop temp_sex
 
 *** Household composition - pandemic 
-* Note that wave ca is missing relationshp data so will be classified on the basis 
+* Note that wave ca is missing relationship data so will be classified on the basis 
 * of first valid data person has from remaining waves. Designed to be consistent with CLS
 
 label define household_comp 0 "Alone" 1 "Partner" 2 "Partner & children" 3 "Lone parent" 4 "Other person" 
@@ -939,7 +940,7 @@ label variable ethnicity_bin "Ethnicity Binary"
 
 
 
-label define ethnicity1 1 "White" 2 "Mixed" 3 "Indian" 4 "Pakistani" 5 "Bangladeshi" 6 "Black Caribean" 7 "Black African" 8 "Other" 
+label define ethnicity1 1 "White" 2 "Mixed" 3 "Indian" 4 "Pakistani" 5 "Bangladeshi" 6 "Black Caribbean" 7 "Black African" 8 "Other" 
 recode ch_racel_dv(-9/-1 = . ) (1/4 = 1) (5/8 = 2 ) (9 = 3) (10 = 4) (11 = 5) (12/13 = 8) (14 = 6) (15 = 7) (16/97 = 8)  , gen(ethnicity1)
 label values ethnicity1 ethnicity1 
 
@@ -949,11 +950,10 @@ label values ethnicity1 ethnicity1
 
 
 **** NSSEC 7
-* Note inorder to be consistent with wave9 for ELSa this will being
-* Note that I am focusing on ELSA firt. 
+* Note that I am focusing on ELSA first. 
 
 
-*These are a derived variable showing last jub NSSEC
+*These are a derived variable showing last job NSSEC
 foreach x in k j i h g {
 gen `x'_nssec8 = `x'_jbnssec8_dv 
 replace `x'_nssec8 = `x'_jlnssec8_dv if `x'_jbnssec8_dv == -8 & `x'_jlnssec8_dv > 0 & `x'_jlnssec8_dv !=. 
@@ -965,22 +965,22 @@ recode nssec8 -9/-1 = .
 }
 recode nssec8 . = 9
 
-label define nssec8 1 "Large employers & higher mangement" 2 "Higher professional" 3 "Lower management & professional" 4 "Intermediate" 5 "Small employers & own acccount" 6 "Lower supervisory & technical" 7 "Semi-routine" 8 "routine" 9 "Unclassifiable"
+label define nssec8 1 "Large employers & higher management" 2 "Higher professional" 3 "Lower management & professional" 4 "Intermediate" 5 "Small employers & own account" 6 "Lower supervisory & technical" 7 "Semi-routine" 8 "routine" 9 "Unclassifiable"
 label values nssec8 nssec8
-*Note some of the unclassifiable might be coded as longterm unemployed at this point to distingush those in educaiton or training. 
+*Note some of the unclassifiable might be coded as long-term unemployed at this point to distinguish those in educaiton or training. 
 
-recode nssec8 (1/2 = 1 "Higher management or professional") (3 = 2 "Lower management and professional" ) (4 = 3 "Intermediate") (5 = 4 "Small Employer") (6 = 5 "Lower supervisory") (7 = 6 "Semi-routine") (8 = 7 "Routine") (999 = 8 "longterm unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec7)
+recode nssec8 (1/2 = 1 "Higher management or professional") (3 = 2 "Lower management and professional" ) (4 = 3 "Intermediate") (5 = 4 "Small Employer") (6 = 5 "Lower supervisory") (7 = 6 "Semi-routine") (8 = 7 "Routine") (999 = 8 "long-term unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec7)
 label variable nssec7 "NS-SEC 7 Categories"
 
 
-recode nssec7  (1/2 = 1 "Management & professional ") (3 = 2 "Intermediate") (4 = 3 "Small Employer") (5 = 4 "Lower supervisory & Technical") (6/7 = 5 "Semi-routine & Routine")  (8 = 6 "longterm unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec5)
+recode nssec7  (1/2 = 1 "Management & professional ") (3 = 2 "Intermediate") (4 = 3 "Small Employer") (5 = 4 "Lower supervisory & Technical") (6/7 = 5 "Semi-routine & Routine")  (8 = 6 "long-term unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec5)
 label variable nssec5 "NS-SEC 5 Categories"
 
 
 
 
 *** SOC - pre-pandemic
-*NB not sure this is necessarily the most efficient, and have corrected some of Mikes code. 
+*NB not sure this is necessarily the most efficient, and have corrected some of Mike's code. 
 *Namely d2 needs both `y' and `z' and d3 needs both `y' `z' `k' 
 *Can probably just divide the three digit version by ten for the 2 digit version then 
 
@@ -1307,7 +1307,7 @@ tab hh_comp
 *NSSEC7
 tab nssec7
 
-*Self_rated health 
+*Self-rated health 
 tab sr_health 
 
 *Key worker status: keyworker -> keyworker
@@ -1347,7 +1347,7 @@ clear all
 
 
 
-*First reasemble main bcs10 file and select necessary variables 
+*First reassemble main bcs10 file and select necessary variables 
 use  "$source\bcs_age46_main.dta", clear
 rename _all, lower
 
@@ -1361,7 +1361,7 @@ save  "$destination\bcs6_ethnic.dta" , replace
 
 
 
-*Note core demographic file is quite small so add serperately 
+*Note core demographic file is quite small so add sepearately 
 * use  "$source\BCS70_basic_demographic_v0001_20211101.dta", clear
 
 
@@ -1396,7 +1396,7 @@ gen employment_selection = 1 if inlist(cw1_econactivityb, 1, 2)
 * Cohort management variables 
 
 *Note these to be copied through to R to derive them. 
-desc cw3_enddated cw3_enddatem // These are deate of survey completion and will need to add the year 2021 to produce the final variable 
+desc cw3_enddated cw3_enddatem // These are date of survey completion and will need to add the year 2021 to produce the final variable 
 gen cohort_id = "BCS70"
 
 
@@ -1407,7 +1407,7 @@ gen cohort_id = "BCS70"
 *====================================================================================================================================
 * employment status
 * -----------------
-* Note RJS I have amemnded this as aprentices are employees and getting paid a wage and holidya pay. 
+* Note RJS I have amended this as apprentices are employees and getting paid a wage and holiday pay. 
 recode cw3_econactivityd (1 3 4 6 = 0 "employed / self-employed") ///
                          (2 = 1 "furloughed") (5 7/13 = 2 "Not Employed") ///
                          (-99/-1=.), gen(employment_status)
@@ -1448,7 +1448,7 @@ recode ch_hours_prop (0.90/1.10 = 0 "stayed the same (90% to 110%)") ///
 					 (0/0.90 = 1 "Decreased") ///
 					 (1.10/40 = 2 "Increased"), gen(change_hours_cat) 
 
-*Five categoies of change in working time as described in the paper. 
+*Five categories of change in working time as described in the paper. 
 recode change_hours_cat (0 = 0) (2 = 1 )  (1 = 2), gen(worktime_change)
 replace worktime_change = 3 if  employment_status ==1
 replace  worktime_change = 4 if employment_status ==2
@@ -1461,7 +1461,7 @@ tab employment_status, nolabel
 * EXPOSURES
 * ====================================================================================================================================
 
-* covid_ever -  suspeced covid
+* covid_ever -  suspected covid
 * ------------------------------
 cap drop covid_ever
 gen covid_ever = 1 if (inlist(cw3_covid19,1, 2) | inlist(cw2_covid19,1, 2) | inlist(cw1_covid19,1,2)) 
@@ -1505,7 +1505,7 @@ label values covid_sr covid_sr
 * ------------
 
 
-label define covid_period 0 "No Covid" 1 "Before September 1st 2020" 2 "After September 1st 2020" 3 "Before and after 23 september"
+label define covid_period 0 "No Covid" 1 "Before September 1st 2020" 2 "After September 1st 2020" 3 "Before and after 23 September"
 
 gen survey1 = 1 if inlist(cw1_covid19,1, 2)  == 1
 recode survey1 . = 0 if inlist(cw1_covid19, 3, 4)  == 1
@@ -1600,7 +1600,7 @@ label variable ethnicity_bin "Ethnicity Binary"
 
 
 tab ethnic
-label define ethnicity1 1 "White" 2 "Mixed" 3 "Indian" 4 "Pakistani" 5 "Bangladeshi" 6 "Black Caribean" 7 "Black African" 8 "Other" 
+label define ethnicity1 1 "White" 2 "Mixed" 3 "Indian" 4 "Pakistani" 5 "Bangladeshi" 6 "Black Caribbean" 7 "Black African" 8 "Other" 
 recode ethnic (1/3 = 1) (4/7 = 2 ) (8 = 3) (9 = 4) (10 = 5) (11 = 8) (12 = 6) (13 = 7) (14 = 8) (15 = 8) (16 = 8) (98/99 = .) , gen(ethnicity1)
 label values ethnicity1 ethnicity1 
 
@@ -1624,11 +1624,11 @@ tab cw3_sic3
 gen sic_1d = . 
 
 * nssec 7 (pre-C19 )
-recode cw1_nssec2010an (1/1.9 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 = 8 "longterm unemployed" ) (-1 9 = 9 "Other Unclassifiable")  , gen(nssec7)
+recode cw1_nssec2010an (1/1.9 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 = 8 "long-term unemployed" ) (-1 9 = 9 "Other Unclassifiable")  , gen(nssec7)
 label variable nssec7 "NS-SEC 7 Categories"
 
 * nssec  5 (pre-C19 ) 
-recode nssec7  (1/2 = 1 "Management & professional ") (3 = 2 "Intermediate") (4 = 3 "Small Employer") (5 = 4 "Lower supervisory & Technical") (6/7 = 5 "Semi-routine & Routine")  (8 = 6 "longterm unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec5)
+recode nssec7  (1/2 = 1 "Management & professional ") (3 = 2 "Intermediate") (4 = 3 "Small Employer") (5 = 4 "Lower supervisory & Technical") (6/7 = 5 "Semi-routine & Routine")  (8 = 6 "long-term unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec5)
 label variable nssec5 "NS-SEC 5 Categories"
 
 
@@ -1641,7 +1641,7 @@ label variable nssec5 "NS-SEC 5 Categories"
 * ====================================================================================================================================
 * Age
 * change this if needed 
-* Note as I htink they are are all born in April this may need changing 
+* Note as I think they are all born in April this may need changing 
 gen age = 50
 
 * country of residence
@@ -1652,7 +1652,7 @@ recode cw3_countres ///
 	(1 = 1 "England")  ///
 	(2 = 3 "Wales") ///
 	(3 = 2 "Scotland") ///
-	(4 = 4 "Nothern Ireland") ///
+	(4 = 4 "Northern Ireland") ///
 	(5 = 5 "Elsewhere") , gen(country)
 	
 
@@ -1725,11 +1725,11 @@ recode sr_health -8 = .
 recode bd10malg (1 = 0 "Low malaise") (2 = 1 "High malaise") , gen(mental_health) 
 
 
-* keyworker at any point (across the pandemic - nonemployed are sep category)
+* keyworker at any point (across the pandemic - non-employed are sep category)
 * ---------------------------------------------------------------------------
-* RJS not I revised thos code to be first incidence of keyworker and theen use later waves
-* to fill in small number of misisng. 
-* Ideally you would it defined pre-pandemic but also the concept did not exist prior this is the subtitute. 
+* RJS note I revised this code to be first incidence of keyworker and then use later waves
+* to fill in small number of missing. 
+* Ideally you would have it defined pre-pandemic but also the concept did not exist prior this is the substitute. 
 
 
 
@@ -1748,7 +1748,7 @@ codebook keyworker
 
 * shielded at any point
 * ---------------------
-* Shielding has smilar issues to keyworker up switching to using the first wave to be consistent with USoc. 
+* Shielding has similar issues to keyworker up switching to using the first wave to be consistent with USoc. 
 * 
 
 
@@ -1860,7 +1860,7 @@ gen employment_selection = 1 if inlist(cw1_econactivityb, 1, 2)
 * Cohort management variables 
 
 *Note these to be copied through to R to derive them. 
-desc cw3_enddated cw3_enddatem // These are deate of survey completion and will need to add the year 2021 to produce the final variable 
+desc cw3_enddated cw3_enddatem // These are date of survey completion and will need to add the year 2021 to produce the final variable 
 gen cohort_id = "NextSteps"
 
 
@@ -1871,7 +1871,7 @@ gen cohort_id = "NextSteps"
 
 * employment status
 * -----------------
-* Note RJS I have amemnded this as aprentices are employees and getting paid a wage and holidya pay. 
+* Note RJS I have amended this as apprentices are employees and getting paid a wage and holiday pay. 
 recode cw3_econactivityd (1 3 4 6 = 0 "employed / self-employed") ///
                          (2 = 1 "furloughed") (5 7/13 = 2 "Not Employed") ///
                          (-99/-1=.), gen(employment_status)
@@ -1909,7 +1909,7 @@ recode ch_hours_prop (0.90/1.10 = 0 "stayed the same (90% to 110%)") ///
 					 (0/0.90 = 1 "Decreased") ///
 					 (1.10/40 = 2 "Increased"), gen(change_hours_cat) 
 
-*Five categoies of change in working time as described in the paper. 
+*Five categories of change in working time as described in the paper. 
 recode change_hours_cat (0 = 0) (2 = 1 )  (1 = 2), gen(worktime_change)
 replace worktime_change = 3 if  employment_status ==1
 replace  worktime_change = 4 if employment_status ==2
@@ -1964,7 +1964,7 @@ label values covid_sr covid_sr
 * covid_timing
 * ------------
 
-label define covid_period 0 "No Covid" 1 "Before September 1st 2020" 2 "After September 1st 2020" 3 "Before and after 23 september"
+label define covid_period 0 "No Covid" 1 "Before September 1st 2020" 2 "After September 1st 2020" 3 "Before and after 23 September"
 
 gen survey1 = 1 if inlist(cw1_covid19,1, 2)  == 1
 recode survey1 . = 0 if inlist(cw1_covid19, 3, 4)  == 1
@@ -2085,11 +2085,11 @@ gen sic_1d = .
 
 
 * nssec (pre-C19 ) 7
-recode cw1_nssec2010an (1/1.9 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 = 8 "longterm unemployed" ) ( -1 9 = 9 "Other Unclassifiable")  , gen(nssec7)
+recode cw1_nssec2010an (1/1.9 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 = 8 "long-term unemployed" ) ( -1 9 = 9 "Other Unclassifiable")  , gen(nssec7)
 label variable nssec7 "NS-SEC 7 Categories"
 
 * nssec (pre-C19 ) 5
-recode nssec7  (1/2 = 1 "Management & professional ") (3 = 2 "Intermediate") (4 = 3 "Small Employer") (5 = 4 "Lower supervisory & Technical") (6/7 = 5 "Semi-routine & Routine")  (8 = 6 "longterm unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec5)
+recode nssec7  (1/2 = 1 "Management & professional ") (3 = 2 "Intermediate") (4 = 3 "Small Employer") (5 = 4 "Lower supervisory & Technical") (6/7 = 5 "Semi-routine & Routine")  (8 = 6 "long-term unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec5)
 label variable nssec5 "NS-SEC 5 Categories"
 
 * CONTROL VARIABLES
@@ -2108,7 +2108,7 @@ recode cw3_countres ///
 	(1 = 1 "England")  ///
 	(2 = 3 "Wales") ///
 	(3 = 2 "Scotland") ///
-	(4 = 4 "Nothern Ireland") ///
+	(4 = 4 "Northern Ireland") ///
 	(5 = 5 "Elsewhere") , gen(country)
 	
 
@@ -2183,7 +2183,7 @@ recode  w8dghqsc  (0/3 = 0 "No") (4/12 = 1 "Yes"), gen(mental_health)
 
 
 
-* keyworker at any point (across the pandemic - nonemployed are sep category)
+* keyworker at any point (across the pandemic - non-employed are sep category)
 * ---------------------------------------------------------------------------
 
 
@@ -2204,7 +2204,7 @@ codebook keyworker
 
 * shielded at any point
 * ---------------------
-* Shielding has smilar issues to keyworker up switching to using the first wave to be consistent with USoc. 
+* Shielding has similar issues to keyworker up switching to using the first wave to be consistent with USoc. 
 * 
 
 
@@ -2287,7 +2287,7 @@ clear all
 
 
 
-*First reasemble main bcs10 file and select necessary variables 
+*First reassemble main bcs10 file and select necessary variables 
 use  "$source\ncds_2013_flatfile.dta", clear
 
 keep NCDSID N9KHPB08
@@ -2299,7 +2299,7 @@ save  "$destination\ncds9_mental_health.dta" , replace
 clear all
 set maxvar 30000
 
-*NOte reasembling files in their original form. 
+*Note reassembling files in their original form. 
 
 
 
@@ -2335,7 +2335,7 @@ gen employment_selection = 1 if inlist(cw1_econactivityb, 1, 2)
 * Cohort management variables 
 
 *Note these to be copied through to R to derive them. 
-desc cw3_enddated cw3_enddatem // These are deate of survey completion and will need to add the year 2021 to produce the final variable 
+desc cw3_enddated cw3_enddatem // These are date of survey completion and will need to add the year 2021 to produce the final variable 
 gen cohort_id = "NCDS"
 
 
@@ -2346,7 +2346,7 @@ gen cohort_id = "NCDS"
 
 * employment status
 * -----------------
-* Note RJS I have amemnded this as aprentices are employees and getting paid a wage and holidya pay. 
+* Note RJS I have amended this as apprentices are employees and getting paid a wage and holiday pay. 
 recode cw3_econactivityd (1 3 4 6 = 0 "employed / self-employed") ///
                          (2 = 1 "furloughed") (5 7/13 = 2 "Not Employed") ///
                          (-99/-1=.), gen(employment_status)
@@ -2384,7 +2384,7 @@ recode ch_hours_prop (0.90/1.10 = 0 "stayed the same (90% to 110%)") ///
 					 (0/0.90 = 1 "Decreased") ///
 					 (1.10/40 = 2 "Increased"), gen(change_hours_cat) 
 
-*Five categoies of change in working time as described in the paper. 
+*Five categories of change in working time as described in the paper. 
 recode change_hours_cat (0 = 0) (2 = 1 )  (1 = 2), gen(worktime_change)
 replace worktime_change = 3 if  employment_status ==1
 replace  worktime_change = 4 if employment_status ==2
@@ -2437,7 +2437,7 @@ label values covid_sr covid_sr
 * ------------
 
 
-label define covid_period 0 "No Covid" 1 "Before September 1st 2020" 2 "After September 1st 2020" 3 "Before and after 23 september"
+label define covid_period 0 "No Covid" 1 "Before September 1st 2020" 2 "After September 1st 2020" 3 "Before and after 23 September"
 
 gen survey1 = 1 if inlist(cw1_covid19,1, 2)  == 1
 recode survey1 . = 0 if inlist(cw1_covid19, 3, 4)  == 1
@@ -2541,18 +2541,18 @@ tab cw3_sic3
 gen sic_1d = . 
 
 * nssec (pre-C19 ) 7
-recode cw1_nssec2010an (1/1.9 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 = 8 "longterm unemployed" ) ( -1 9 = 9 "Other Unclassifiable")  , gen(nssec7)
+recode cw1_nssec2010an (1/1.9 = 1 "Higher management or professional") (2 = 2 "Lower management and professional" ) (3 = 3 "Intermediate") (4 = 4 "Small Employer") (5 = 5 "Lower supervisory") (6 = 6 "Semi-routine") (7 = 7 "Routine") (8 = 8 "long-term unemployed" ) ( -1 9 = 9 "Other Unclassifiable")  , gen(nssec7)
 label variable nssec7 "NS-SEC 7 Categories"
 
 * nssec (pre-C19 ) 5
-recode nssec7  (1/2 = 1 "Management & professional ") (3 = 2 "Intermediate") (4 = 3 "Small Employer") (5 = 4 "Lower supervisory & Technical") (6/7 = 5 "Semi-routine & Routine")  (8 = 6 "longterm unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec5)
+recode nssec7  (1/2 = 1 "Management & professional ") (3 = 2 "Intermediate") (4 = 3 "Small Employer") (5 = 4 "Lower supervisory & Technical") (6/7 = 5 "Semi-routine & Routine")  (8 = 6 "long-term unemployed" ) ( 9 = 9 "Other Unclassifiable")  , gen(nssec5)
 label variable nssec5 "NS-SEC 5 Categories"
 
 * CONTROL VARIABLES
 * ====================================================================================================================================
 * Age
 * change this if needed 
-* Note as I htink they are are all born in March this may need changing 
+* Note as I think they are all born in March this may need changing 
 gen age = 63
 
 * country of residence
@@ -2563,7 +2563,7 @@ recode cw3_countres ///
 	(1 = 1 "England")  ///
 	(2 = 3 "Wales") ///
 	(3 = 2 "Scotland") ///
-	(4 = 4 "Nothern Ireland") ///
+	(4 = 4 "Northern Ireland") ///
 	(5 = 5 "Elsewhere") , gen(country)
 	
 
@@ -2634,11 +2634,11 @@ recode n9khpb08 2 = 0, gen(mental_health)
 label define mental_health 0 "No" 1 "Yes"
 label values mental_health mental_health 
 
-* keyworker at any point (across the pandemic - nonemployed are sep category)
+* keyworker at any point (across the pandemic - non-employed are sep category)
 * ---------------------------------------------------------------------------
-* RJS not I revised thos code to be first incidence of keyworker and theen use later waves
-* to fill in small number of misisng. 
-* Ideally you would it defined pre-pandemic but also the concept did not exist prior this is the subtitute. 
+* RJS note I revised this code to be first incidence of keyworker and then use later waves
+* to fill in small number of missing. 
+* Ideally you would have it defined pre-pandemic but also the concept did not exist prior this is the substitute. 
 
 
 
@@ -2656,7 +2656,7 @@ codebook keyworker
 
 * shielded at any point
 * ---------------------
-* Shielding has smilar issues to keyworker up switching to using the first wave to be consistent with USoc. 
+* Shielding has similar issues to keyworker up switching to using the first wave to be consistent with USoc. 
 * 
 
 
@@ -2762,7 +2762,7 @@ foreach var in covid_sr age sex hh_comp country shielding sr_health nssec7 educa
 
 
 
-*Creating moderator variabels 
+*Creating moderator variables 
 egen age_temp = cut(age), at(25,50,67)
 recode age_temp (25  = 0 "Under 50") (50  = 1 "50"), gen(age_bin)
 
@@ -2773,10 +2773,10 @@ recode nssec7 9 = . , gen(class_alt)
 recode education 4 = . , gen(educat_alt)
 
 
-*EThnicity too smal to stratify 
+*Ethnicity too small to stratify 
 
 
-*Ns-SEc
+*NS-SEC
 recode nssec7 (1/2 = 0 "Higher") (3/7 = 1 "Intermediate & lower") (9 = .), gen(nssec2)
 
 recode sr_health (1/3 = 0 "Excellent or Good") (4/5 = 1 "Fair or poor")  , gen(sr_bin)
@@ -2862,14 +2862,14 @@ logistic econ_act i.covid_sr         c.age##c.age  i.hh_comp i.shielding i.sr_he
 
 
 
-**** NS_sec
+**** NS_SEC
 logistic econ_act i.covid_sr i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education i.keyworker  i.cohort_num if in_analyses==1 & nssec2 == 0
 
 
 logistic econ_act i.covid_sr i.sex c.age##c.age  i.hh_comp i.shielding i.sr_health            i.education i.keyworker  i.cohort_num if in_analyses==1 & nssec2 == 1
 
 
-*** Sr health 
+*** SR health 
 logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.keyworker  i.cohort_num   if in_analyses==1 & sr_bin == 0
 logistic econ_act i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.keyworker i.cohort_num   if in_analyses==1 & sr_bin == 1
 
@@ -2899,14 +2899,14 @@ logistic employm i.covid_sr         c.age##c.age  i.hh_comp i.shielding i.sr_hea
 
 
 
-**** NS_sec
+**** NS_SEC
 logistic employm i.covid_sr i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 0
 
 
 logistic employm i.covid_sr i.sex c.age##c.age  i.hh_comp i.shielding i.sr_health            i.education  i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 1
 
 
-*** Sr health 
+*** SR health 
 logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education  i.keyworker i.cohort_num   if in_analyses==1 & sr_bin == 0
 logistic employm i.covid_sr c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education  i.keyworker i.cohort_num   if in_analyses==1 & sr_bin == 1
 
@@ -2936,7 +2936,7 @@ estimates store act_sex_base
 lrtest act_sex_int act_sex_base
 
 
-**** NS_sec
+**** NS_SEC
 logistic econ_act i.covid_sr##nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker  i.cohort_num if in_analyses==1 
 estimates store act_nssec_int 
 logistic econ_act i.covid_sr nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker  i.cohort_num if in_analyses==1 
@@ -2944,7 +2944,7 @@ estimates store act_nssec_base
 lrtest act_nssec_int act_nssec_base 
 
 
-*** Sr health 
+*** SR health 
 logistic econ_act i.covid_sr##sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.keyworker  i.cohort_num   if in_analyses==1 
 estimates store act_health_int
 logistic econ_act i.covid_sr  sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education i.keyworker  i.cohort_num   if in_analyses==1
@@ -2976,7 +2976,7 @@ estimates store act_sex_base
 lrtest act_sex_int act_sex_base
 
 
-**** NS_sec
+**** NS_SEC
 logistic employm i.covid_sr##nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker i.cohort_num if in_analyses==1 
 estimates store act_nssec_int 
 logistic employm i.covid_sr nssec2 i.sex c.age##c.age  i.hh_comp  i.shielding i.sr_health           i.education  i.keyworker i.cohort_num if in_analyses==1 
@@ -2984,7 +2984,7 @@ estimates store act_nssec_base
 lrtest act_nssec_int act_nssec_base 
 
 
-*** Sr health 
+*** SR health 
 logistic employm i.covid_sr##sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education  i.keyworker i.cohort_num   if in_analyses==1 
 estimates store act_health_int
 logistic employm i.covid_sr  sr_bin c.age##c.age i.sex i.hh_comp   i.shielding            i.nssec7 i.education  i.keyworker i.cohort_num   if in_analyses==1
@@ -2997,7 +2997,7 @@ logistic employm i.covid_sr  i.keyworker c.zage##c.zage   i.sex i.hh_comp   i.sh
 estimates store act_keyworker_base
 lrtest act_keyworker_int act_keyworker_base
 
-*** Alternative age coding due to small coefficent sizes
+*** Alternative age coding due to small coefficient sizes
 egen zage = std(age)
 
 **** Economic activity full model 
