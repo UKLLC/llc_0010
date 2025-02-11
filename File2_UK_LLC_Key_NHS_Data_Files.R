@@ -1,6 +1,7 @@
 #This file was used to derive the NHS data files used in the analysis in the project. 
 
 #NB This file has been produced by Richard Shaw @ Univeristy of Glasgow but it is based on the R helper file
+# Note I (Richard Shaw) have dyslexia and there may be a few typos. 
 # Date Last Major Update: 03 May 2023
 # Typos corrected 11 Feb 2025
 ########################################################################################
