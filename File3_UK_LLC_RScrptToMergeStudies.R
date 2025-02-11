@@ -1,6 +1,8 @@
 #This file is run to put together the cohort and NHS data within the UK LLC. 
 # This file creates  the main spine of the data. Multiple files will need to be run in advance.
 # Note this version was written on the 03May2023 
+# Updated 11 Feb 2025 to correct typos. 
+# NB I, Richard Shaw, have dyslexia and there may be a few typos I miss. 
 
 
 library(haven) 
@@ -101,7 +103,7 @@ first_test <- readRDS("S:/LLC_0010/data/multiple/first_pos_test_2022-10-31.rds")
 first_covid_hosp <- readRDS("S:/LLC_0010/data/multiple/first_hospital_covid_record_2022-11-04.rds")
 first_covid_gp <- readRDS("S:/LLC_0010/data/multiple/first_gp_covid_record_2022-11-04.rds")
 
-#Will probably need a vacination date but for most people it may be after the outcome wave. 
+#Will probably need a vaccination date but for most people it may be after the outcome wave. 
 
 
 
@@ -112,9 +114,9 @@ bcs70 <- read_dta("S:/LLC_0010/data/flow_chart/BCS70_flowchart_sample_26Apr23.dt
 ncds58 <- read_dta("S:/LLC_0010/data/flow_chart/NCDS_flowchart_sample_23Apr23.dta")
 nextsteps <- read_dta("S:/LLC_0010/data/flow_chart/nextsteps_flowchart_sample_23Apr23.dta")
 
-# at a later stage factor order gets muddled up not using this althoug may have some advantages in some context so making a note of the code  usoc_labeled <- as_factor(usoc, levels = "labels")
+# at a later stage factor order gets muddled up not using this although may have some advantages in some context so making a note of the code  usoc_labeled <- as_factor(usoc, levels = "labels")
 
-#generation scotland is being converted as labels and factors are problematic. 
+#Generation Scotland is being converted as labels and factors are problematic. 
 
 #cls cohorts 
 bcs70_convert <- bcs70 |>
@@ -202,7 +204,7 @@ combined_data <- left_join(combined_data, ethnic.df,  by = "llc_0010_stud_id" ) 
 
 ###############################################################################
 # Now attaching the spine
-### note previous version had done this before adding NHS data but because including generation Scoltand comes later. 
+### note previous version had done this before adding NHS data but because including Generation Scotland comes later. 
 core_denominator$in_spine <- 1
 
 
