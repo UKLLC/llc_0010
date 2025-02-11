@@ -1,4 +1,5 @@
 *This file contains the code to select the final analytic sample and run the descriptives and analyses. 
+* Note typos corrected on 11 Feb 2025- By Richard Shaw (who has dyslexia) with help from Richard Silverwood. 
 
 use "S:\LLC_0010\data\flow_chart\FlowChart_24Apr2023.dta" , clear
 
@@ -55,13 +56,13 @@ foreach var in Test_positive age sex hh_comp ethnicity shielding sr_health nssec
 
 
 
-*Creating moderator variabels 
+*Creating moderator variables 
 egen age_temp = cut(age), at(25,50,67)
 recode age_temp (25  = 0 "Under 50") (50  = 1 "50"), gen(age_bin)
 
 *** Stratified analyses 
 *Note changes used combine ethnic groups. 
-*drop those unclassiable 
+*drop those unclassifiable 
 recode nssec7 9 = . , gen(class_alt)
 recode education 4 = . , gen(educat_alt)
 
@@ -190,7 +191,7 @@ logistic employm i.Test_positive c.age##c.age  i.hh_comp i.ethnicity_bin i.shiel
 
 
 
-**** Xlass stratified 
+**** Class stratified 
 logistic employm i.Test_positive c.age##c.age i.sex i.hh_comp i.ethnicity_bin i.shielding i.sr_health i.educat_alt i.keyworker i.cohort_num if in_analyses==1 & nssec2 == 0
 
 
